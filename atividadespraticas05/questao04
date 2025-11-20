@@ -1,0 +1,53 @@
+"""4 - Crie um programa que calcule a quantos dias um individuo está vivo de acordo com a data do dia."""
+
+from datetime import date
+
+def calcular_dias_de_vida():
+    """
+    Calcula o número de dias que um indivíduo está vivo
+    com base em sua data de nascimento.
+    """
+    print("--- Calculadora de Dias de Vida ---")
+    
+    # 1. Interação com o usuário para obter a data de nascimento
+    try:
+        dia = int(input("Digite o dia de nascimento (DD): "))
+        mes = int(input("Digite o mês de nascimento (MM): "))
+        ano = int(input("Digite o ano de nascimento (AAAA): "))
+    except ValueError:
+        print("\n🚫 Erro: Por favor, insira valores numéricos inteiros para dia, mês e ano.")
+        return
+
+    try:
+        # 2. Criação do objeto data de nascimento
+        data_nascimento = date(ano, mes, dia)
+        
+        # 3. Determinação da data atual
+        data_atual = date.today()
+        
+        # 4. Verificação de validade da data
+        if data_nascimento > data_atual:
+            print("\n⚠️ Erro: A data de nascimento não pode ser futura!")
+            return
+
+        # 5. Cálculo da diferença de dias (Subtração entre objetos 'date')
+        diferenca = data_atual - data_nascimento
+        
+        # O resultado da subtração é um objeto 'timedelta', 
+        # acessamos o atributo 'days' para obter o número total de dias.
+        dias_vivos = diferenca.days
+
+        # 6. Exibição do resultado
+        print("\n--- Resultado ---")
+        print(f"Data de Nascimento: {data_nascimento.strftime('%d/%m/%Y')}")
+        print(f"Data Atual: {data_atual.strftime('%d/%m/%Y')}")
+        print("-" * 25)
+        print(f"🎉 Você está vivo há exatamente **{dias_vivos:,} dias**!")
+        print("-------------------")
+        
+    except ValueError:
+        # Captura erros de datas inválidas (ex: 30 de Fevereiro)
+        print("\n🚫 Erro: Data de nascimento inválida. Verifique o dia, mês e ano digitados.")
+
+# Executa a função principal
+calcular_dias_de_vida()

@@ -1,0 +1,66 @@
+"""4 - Crie um programa que realize consultas a  em relação ao Real (BRL) usando a API mostre valor atual, máxima, mínima e data/hora da última atualização, caso a moeda não existir ou houver erro na requisição, retorne uma mensagem de erro."""
+
+
+import requests
+
+def consultar_cotacao_conciso():
+    """
+    Consulta a cotação de uma moeda estrangeira em relação ao Real (BRL)
+    usando a Awesome API, exibindo valor, máxima, mínima e atualização.
+    """
+    
+    # 1. Entrada e validação do código da moeda
+    while True:
+        moeda = input("Digite o código da moeda (ex: USD, EUR, JPY): ").strip().upper()
+        if len(moeda) == 3 and moeda.isalpha():
+            break
+        print("Atenção: O código deve ser composto por 3 letras (ex: USD).")
+            
+    # Formato da URL: BRL-MOEDA (para buscar 'moeda' por 'real')
+    API_URL = f"https://economia.awesomeapi.com.br/json/last/{moeda}-BRL"
+    
+    try:
+        # 2. Requisição, verificação de status e conversão JSON
+        print(f"\nBuscando cotação {moeda}/BRL...")
+        response = requests.get(API_URL, timeout=5)
+        response.raise_for_status() 
+        dados = response.json()
+        
+        # O Awesome API retorna um JSON vazio {} ou com erro HTTP 404
+        # se o par de moedas não for encontrado. O raise_for_status() trata o 404.
+        
+        # A chave de dados é dinâmica (ex: 'USDBRL').
+        chave = f"{moeda}BRL"
+        
+        if not dados or chave not in dados:
+            print(f"\nFalha: O par de moedas {moeda}/BRL não foi encontrado na API.")
+            return
+
+        # 3. Extração dos dados
+        cotacao = dados[chave]
+        
+        # timestamp é o número de segundos desde 1970 (UNIX time)
+        timestamp = int(cotacao['timestamp'])
+        data_atualizacao = datetime.fromtimestamp(timestamp).strftime('%d/%m/%Y %H:%M:%S')
+
+        # 4. Exibição dos dados
+        print("\nDetalhes da Cotação:")
+        print(f"Moeda: {moeda}/BRL")
+        print(f"Valor Atual (Compra): R$ {cotacao['bid']}")
+        print(f"Máxima (Dia): R$ {cotacao['high']}")
+        print(f"Mínima (Dia): R$ {cotacao['low']}")
+        print(f"Última Atualização: {data_atualizacao}")
+
+    except requests.exceptions.RequestException as e:
+        # 5. Tratamento de erro de conexão ou HTTP
+        print(f"\nFalha na Requisição: Ocorreu um erro de conexão ou HTTP. Erro: {e}")
+        
+    except Exception as e:
+        # 6. Tratamento de outros erros inesperados (ex: parsing JSON ou KeyError)
+        print(f"\nErro Inesperado ao processar os dados: {e}")
+
+# Importamos datetime dentro do if __name__ para manter o código limpo
+# e importar apenas o necessário para a função principal.
+from datetime import datetime
+if __name__ == "__main__":
+    consultar_cotacao_conciso()

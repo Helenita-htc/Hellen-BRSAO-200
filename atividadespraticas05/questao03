@@ -1,0 +1,37 @@
+
+3 - Crie um programa que serve para calcular o preço final de um produto após aplicar um desconto percentual.
+
+   a - Cálculo de desconto: Calcula o valor do desconto baseado em uma porcentagem. 
+   b - Preço final: Determina o novo preço após o desconto.
+   c - Formatação: Arredonda o resultado para 2 casas decimais (centavos).
+   d - Interação com usuário: Pede os valores necessários e mostra o resultado formatado.
+
+
+def calcular_desconto_compacto():
+    """Calcula o preço final de um produto com desconto de forma compacta."""
+    try:
+        # Pede os valores e já converte para float
+        p = float(input("💰 Preço original (R$): "))
+        d = float(input("✂️ Percentual de desconto (%): "))
+        
+        # 🎯 Função Lambda para o cálculo (mais concisa que uma função def)
+        calculo_final = lambda preco, percentual: preco * (1 - percentual / 100)
+        
+        # 1. Calcula o Preço Final
+        preco_final = calculo_final(p, d)
+        
+        # 2. Calcula o Valor do Desconto
+        valor_desconto = p - preco_final
+        
+        # Mostra o resultado formatado
+        print("\n--- Resultado ---")
+        print(f"💸 Desconto (R$): {valor_desconto:.2f}")
+        print(f"✅ Preço Final (R$): {preco_final:.2f}")
+
+    except ValueError:
+        print("\n🚫 Erro: Entrada inválida. Use apenas números.")
+    except Exception as e:
+        print(f"\n🚫 Ocorreu um erro: {e}")
+
+# Executa
+calcular_desconto_compacto()

@@ -1,0 +1,38 @@
+"""2 -   Crie um programa que  acesse a API  para buscar um usuário fictício aleatório. exibindo o nome, e-mail e país desse usuário, caso houver erro na conexão, mostre uma mensagem de falha."""
+
+import requests
+
+def buscar_usuario_conciso():
+    """Busca um usuário aleatório em uma API e exibe seus dados, tratando erros."""
+    
+    API_URL = "https://randomuser.me/api/"
+    
+    try:
+        # 1. Requisição e verificação de status em uma única linha (Timeout incluído)
+        response = requests.get(API_URL, timeout=10)
+        response.raise_for_status() 
+        
+        # 2. Extração dos dados
+        dados = response.json()['results'][0]
+        
+        nome = f"{dados['name']['first']} {dados['name']['last']}"
+        email = dados['email']
+        pais = dados['location']['country']
+        
+        # 3. Exibir o resultado
+        print("Busca concluída com sucesso!")
+        print(f"Nome: {nome}")
+        print(f"E-mail: {email}")
+        print(f"País: {pais}")
+
+    except requests.exceptions.RequestException as e:
+        # 4. Tratamento de todos os erros de conexão/HTTP
+        # Esta única exceção captura Timeout, ConnectionError e HTTPError
+        print(f"Falha ao buscar o usuário. Erro: {e}")
+        
+    except (KeyError, IndexError):
+        # 5. Tratamento de erro de formato
+        print("Erro: A resposta da API veio em um formato inesperado.")
+
+if __name__ == "__main__":
+    buscar_usuario_conciso()

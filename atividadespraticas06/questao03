@@ -1,0 +1,46 @@
+"""3 - Crie um programa que consulte informações de um  na API , retorne logradouro, bairro, cidade e estado do CEP digitado, caso o CEP não existir ou houver erro na requisição, mostre uma mensagem de falha."""
+
+import requests
+
+def consultar_cep_conciso():
+    """Consulta o endereço de um CEP na API ViaCEP, tratando erros."""
+    
+    # 1. Entrada e validação do CEP
+    while True:
+        cep = input("Digite o CEP (8 dígitos): ").strip()
+        cep_limpo = ''.join(filter(str.isdigit, cep))
+        if len(cep_limpo) == 8:
+            break
+        print("Atenção: O CEP deve ter 8 dígitos. Tente novamente.")
+            
+    API_URL = f"https://viacep.com.br/ws/{cep_limpo}/json/"
+    
+    try:
+        # 2. Requisição, verificação de status e conversão JSON
+        response = requests.get(API_URL, timeout=5)
+        response.raise_for_status() 
+        dados = response.json()
+        
+        # 3. Tratamento de CEP não encontrado (característica da ViaCEP)
+        if dados.get('erro'):
+            print("\nFalha: O CEP digitado não foi encontrado na base de dados.")
+            return
+
+        # 4. Exibição dos dados
+        print("\nEndereço Encontrado:")
+        print(f"Logradouro: {dados.get('logradouro', 'Não Informado')}")
+        print(f"Bairro: {dados.get('bairro', 'Não Informado')}")
+        print(f"Cidade: {dados.get('localidade', 'Não Informada')}")
+        print(f"Estado (UF): {dados.get('uf', 'Não Informado')}")
+
+    except requests.exceptions.RequestException as e:
+        # 5. Tratamento de erro de conexão ou HTTP
+        print(f"\nFalha na Requisição: Ocorreu um erro de conexão. Erro: {e}")
+        
+    except Exception as e:
+        # 6. Tratamento de outros erros inesperados (ex: parsing JSON)
+        print(f"\nErro Inesperado ao processar os dados: {e}")
+
+if __name__ == "__main__":
+    consultar_cep_conciso()
+    

@@ -1,0 +1,36 @@
+"""2-  Crie uma função que verifique se uma palavra ou frase é um palíndromo (lê-se igual de trás para frente,
+ ignorando espaços e pontuação). Se o resultado é True, responda “Sim”, se o resultado for False, responda “Não”."""
+
+
+import re
+
+def verificar_palindromo(texto):
+    """
+    Verifica se uma palavra ou frase é um palíndromo, ignorando
+    espaços, pontuação e diferenças entre maiúsculas e minúsculas.
+
+    Args:
+        texto (str): A string a ser verificada.
+
+    Returns:
+        str: "Sim" se for um palíndromo, "Não" caso contrário.
+    """
+    # Remove caracteres não alfanuméricos e converte para minúsculas
+    texto_limpo = re.sub(r'[^a-zA-Z0-9]', '', texto).lower()
+    
+    # Verifica se a string limpa é igual à sua versão invertida
+    if texto_limpo == texto_limpo[::-1]:
+        return "Sim"
+    else:
+        return "Não"
+
+# Exemplos de uso:
+frase1 = "A man, a plan, a canal: Panama"
+frase2 = "Socorram-me, subi no ônibus em Marrocos"
+palavra1 = "reconhecer"
+palavra2 = "teste"
+
+print(f"'{frase1}': {verificar_palindromo(frase1)}")
+print(f"'{frase2}': {verificar_palindromo(frase2)}")
+print(f"'{palavra1}': {verificar_palindromo(palavra1)}")
+print(f"'{palavra2}': {verificar_palindromo(palavra2)}")

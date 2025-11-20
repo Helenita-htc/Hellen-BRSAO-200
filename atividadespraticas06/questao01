@@ -1,0 +1,38 @@
+"""1 - Crie um programa que gere senhas aleatórias com letras, números e símbolos e que o usuário  também escolha o tamanho da senha  para criar senhas seguras automaticamente."""
+
+import random
+import string
+
+def gerar_senha_concisa_sem_emojis():
+    """Gera uma senha aleatória de tamanho definido pelo usuário de forma concisa."""
+    
+    # 1. Definir o conjunto completo de caracteres
+    caracteres = string.ascii_letters + string.digits + string.punctuation
+    
+    # 2. Solicitar o tamanho da senha (com tratamento de erro em loop)
+    while True:
+        try:
+            # Pede a entrada e tenta converter para inteiro imediatamente
+            tamanho = int(input("Digite o tamanho da senha: "))
+            
+            # Verifica se o tamanho é válido (maior que zero)
+            if tamanho > 0:
+                break  # Sai do loop se a entrada for um inteiro positivo
+            else:
+                print("Atenção: O tamanho deve ser um número positivo.")
+        
+        except ValueError:
+            print("Erro: Entrada inválida. Digite apenas um número inteiro.")
+            
+    # 3. Gerar a senha em uma única linha (Expressão Geradora + join)
+    senha = "".join(random.choice(caracteres) for _ in range(tamanho))
+    
+    # 4. Apresentar o resultado
+    print(f"\nSua senha gerada (Tamanho: {tamanho}):")
+    print(f"--> **{senha}**")
+
+    # Executa a função
+if __name__ == "__main__":
+    gerar_senha_concisa_sem_emojis()
+
+           
