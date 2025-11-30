@@ -1,0 +1,50 @@
+"""4 -   Crie um programa que leia e escreva arquivos no formato , que salve em um dicionário com nome, idade e cidade em um arquivo JSON 
+e depois leia o mesmo arquivo exibindo os dados, caso o arquivo não existir ou ocorrer erro ao salvar, mostre uma mensagem de falha."""
+
+import json
+import os # Necessário para checar a existência do arquivo, se for ler depois de salvar
+
+def manipular_arquivo_json_curto(nome_arquivo='dados.json'):
+    """Salva e lê um dicionário em formato JSON, tratando erros."""
+    
+    # Dados a serem salvos
+    dados = {
+        "usuarios": [
+            {"nome": "Maria", "idade": 28, "cidade": "Recife"},
+            {"nome": "Pedro", "idade": 35, "cidade": "Salvador"}
+        ]
+    }
+
+    # 1. ESCRITA (SALVAMENTO)
+    print("--- Salvando dados JSON ---")
+    try:
+        # Salva o dicionário (dados) no arquivo, formatado
+        with open(nome_arquivo, 'w', encoding='utf-8') as f:
+            json.dump(dados, f, indent=4) 
+        print(f"SUCESSO: Dados salvos em '{nome_arquivo}'.")
+
+    except IOError:
+        print(f"FALHA ao salvar: Erro de I/O (permissão ou caminho).")
+        return
+    
+    # 2. LEITURA (EXIBIÇÃO)
+    print("\n--- Lendo dados JSON ---")
+    try:
+        # Lê o conteúdo do arquivo e transforma em objeto Python
+        with open(nome_arquivo, 'r', encoding='utf-8') as f:
+            dados_lidos = json.load(f)
+            
+        print("SUCESSO: Dados lidos:")
+        # Exibição
+        for user in dados_lidos.get('usuarios', []):
+            print(f"- Nome: {user['nome']}, Idade: {user['idade']}, Cidade: {user['cidade']}")
+        
+    except FileNotFoundError:
+        print(f"ERRO: Arquivo '{nome_arquivo}' não encontrado para leitura.")
+    except json.JSONDecodeError:
+        print(f"ERRO: O arquivo '{nome_arquivo}' não é um JSON válido.")
+    except Exception as e:
+        print(f"ERRO INESPERADO ao ler o arquivo: {e}")
+
+# Executa a função
+manipular_arquivo_json_curto()

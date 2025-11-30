@@ -1,0 +1,62 @@
+"""1 -  Crie um programa que lê um arquivo CSV de  com a biblioteca , calcule e exiba a  e o  
+da coluna tempo_execucao, caso e o arquivo não exista ou houver erro na leitura, 
+mostre uma mensagem de erro."""
+
+
+import pandas as pd
+import os # Importação necessária para verificar se o arquivo existe
+
+def analisar_tempos_execucao_curta(nome_arquivo='dados.csv'):
+    """Lê CSV, calcula Média e Desvio Padrão da coluna 'tempo_execucao', e trata erros."""
+    coluna = 'tempo_execucao'
+    
+    # === Bloco de Criação de Arquivo de Exemplo (para evitar FileNotFoundError) ===
+    if not os.path.exists(nome_arquivo):
+        print(f"Arquivo '{nome_arquivo}' não encontrado. Criando um arquivo de exemplo para rodar o código.")
+        dados_exemplo = {
+            'id': [1, 2, 3, 4, 5],
+            'operacao': ['A', 'B', 'A', 'C', 'B'],
+            'tempo_execucao': [10.5, 5.2, 11.0, 7.8, 6.5]
+        }
+        df_exemplo = pd.DataFrame(dados_exemplo)
+        # Salva o DataFrame no disco como dados.csv
+        df_exemplo.to_csv(nome_arquivo, index=False) 
+        print(f"Arquivo '{nome_arquivo}' criado com sucesso.")
+        print("-" * 40)
+    # ==============================================================================
+    
+    try:
+        # Tenta ler o arquivo
+        df = pd.read_csv(nome_arquivo)
+
+        # 1. Verifica coluna, converte para numérico e remove NaNs
+        if coluna not in df.columns:
+            print(f"ERRO: Coluna '{coluna}' não encontrada no arquivo.")
+            return
+
+        df[coluna] = pd.to_numeric(df[coluna], errors='coerce')
+        df = df.dropna(subset=[coluna])
+
+        if df.empty:
+            print(f"AVISO: Nenhum dado numérico válido encontrado em '{coluna}'.")
+            return
+            
+        # 2. Calcula e exibe Média e Desvio Padrão
+        media = df[coluna].mean()
+        desvio_padrao = df[coluna].std()
+
+        print(f"Análise de '{nome_arquivo}':")
+        print(f"Média: {media:.4f}")
+        print(f"Desvio Padrão: {desvio_padrao:.4f}")
+        print("-" * 40)
+
+    except FileNotFoundError:
+        # Este erro só deve ocorrer se houver problemas de permissão após a tentativa de criação
+        print(f"ERRO: Arquivo '{nome_arquivo}' não encontrado.")
+    except pd.errors.EmptyDataError:
+        print(f"ERRO: O arquivo '{nome_arquivo}' está vazio.")
+    except Exception as e:
+        print(f"ERRO ao processar o arquivo: {e}")
+
+# Executa a função
+analisar_tempos_execucao_curta()

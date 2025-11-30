@@ -1,0 +1,6 @@
+--- Cadastro ---
+NOME            | IDADE           | CIDADE         
+-------------------------------------------------
+Alice           | 30              | São Paulo      
+Bruno           | 25              | Rio de Janeiro 
+Carla           | 45              | Belo Horizonte 

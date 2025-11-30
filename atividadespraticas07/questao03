@@ -1,0 +1,28 @@
+"""3 -  Crie um programa que leia um arquivo  informado pelo usuário, percorrendo cada linha do arquivo e a exibe na tela, caso o arquivo
+ não seja encontrado, mostre uma mensagem de erro."""
+
+def ler_e_exibir_arquivo_curto():
+    """Lê arquivo e exibe conteúdo linha por linha, tratando FileNotFoundError."""
+    
+    nome_arquivo = input("Digite o nome do arquivo a ser lido: ")
+
+    try:
+        # Abre o arquivo para leitura
+        with open(nome_arquivo, 'r', encoding='utf-8') as arquivo:
+            print(f"\n--- Conteúdo de '{nome_arquivo}' ---")
+            
+            # Percorre e exibe cada linha
+            for linha in arquivo:
+                print(linha.strip()) # .strip() remove quebras de linha
+
+            print("--- Fim do Arquivo ---")
+
+    except FileNotFoundError:
+        # Tratamento de erro específico para arquivo não encontrado
+        print(f"\nERRO: O arquivo '{nome_arquivo}' não foi encontrado.")
+    except Exception as e:
+        # Tratamento para outros erros (permissão, codificação, etc.)
+        print(f"\nERRO INESPERADO: Falha na leitura. Detalhe: {e}")
+
+# Executa a função
+ler_e_exibir_arquivo_curto()

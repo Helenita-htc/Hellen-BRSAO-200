@@ -1,0 +1,49 @@
+"""2 - Crie um programa que cria um arquivo  com nome, idade e cidade de algumas pessoas, que este programa escreva os dados 
+em formato tabular e salva no arquivo escolhido pelo usuário, caso ocorra um erro ao salvar, mostre uma mensagem de falha."""
+
+
+import os
+
+def salvar_dados_tabulares_curto():
+    """
+    Cria dados tabulares e salva em arquivo escolhido pelo usuário.
+    Gerencia erros de escrita.
+    """
+    # Dados de exemplo
+    pessoas = [
+        {"nome": "Alice", "idade": 30, "cidade": "São Paulo"},
+        {"nome": "Bruno", "idade": 25, "cidade": "Rio de Janeiro"},
+        {"nome": "Carla", "idade": 45, "cidade": "Belo Horizonte"}
+    ]
+
+    # Solicita o nome do arquivo
+    nome_arquivo = input("Digite o nome do arquivo para salvar (ex: cadastro.txt): ")
+    if not nome_arquivo.lower().endswith(('.txt', '.dat')):
+        nome_arquivo += ".txt"
+        
+    # Formatação dos Dados
+    # Define o cabeçalho e largura fixa para concisão
+    largura = 15
+    cabecalho = f"{'NOME':<{largura}} | {'IDADE':<{largura}} | {'CIDADE':<{largura}}\n"
+    separador = "-" * (3 * largura + 4) + "\n"
+    
+    conteudo_tabular = cabecalho + separador
+    for p in pessoas:
+        linha = f"{p['nome']:<{largura}} | {p['idade']:<{largura}} | {p['cidade']:<{largura}}\n"
+        conteudo_tabular += linha
+
+    # Escrita no Arquivo com Tratamento de Erro
+    try:
+        with open(nome_arquivo, 'w', encoding='utf-8') as f:
+            f.write("--- Cadastro ---\n")
+            f.write(conteudo_tabular)
+        
+        print(f"\nSUCESSO: Dados salvos em '{nome_arquivo}'.")
+        
+    except IOError:
+        print(f"\nFALHA ao salvar o arquivo: Verifique as permissões ou o caminho do arquivo.")
+    except Exception as e:
+        print(f"\nFALHA ao salvar o arquivo: Erro inesperado. Detalhe: {e}")
+
+# Executa a função
+salvar_dados_tabulares_curto()

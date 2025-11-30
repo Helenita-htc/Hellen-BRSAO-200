@@ -1,0 +1,14 @@
+{
+    "usuarios": [
+        {
+            "nome": "Maria",
+            "idade": 28,
+            "cidade": "Recife"
+        },
+        {
+            "nome": "Pedro",
+            "idade": 35,
+            "cidade": "Salvador"
+        }
+    ]
+}
